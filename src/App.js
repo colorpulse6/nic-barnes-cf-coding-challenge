@@ -1,7 +1,7 @@
 import React from "react";
 import CourseDetail from "./components/CourseDetail";
 import "./App.css";
-import Logo from "./img/1587802554_indigo_inverted.png"
+import Logo from "./img/1587802554_indigo_inverted.png";
 
 class App extends React.Component {
   state = {
@@ -34,6 +34,7 @@ class App extends React.Component {
     )
       .then((res) => res.json())
       .then((courseData) => {
+        //Add title to courseData
         courseData.title = course.title;
         return courseData;
       })
@@ -43,7 +44,6 @@ class App extends React.Component {
             showData: true,
             courseData: courseData,
           });
-          console.log(courseData);
         },
         (error) => console.log(error)
       );
@@ -53,6 +53,7 @@ class App extends React.Component {
     fetch(`https://geolocation-db.com/json/`)
       .then((res) => res.json())
       .then((res) => {
+        //Set user IP Address for GEO Location
         this.setState({ userIp: res.IPv4 });
         fetch(
           `http://api.ipstack.com/${this.state.userIp}?access_key=${process.env.REACT_APP_GEO_API_KEY}`
@@ -70,8 +71,6 @@ class App extends React.Component {
   }
 
   handleClick(course) {
-    // this.setState({ showData: true });
-
     this.fetchCourseData(course);
   }
 
@@ -82,31 +81,29 @@ class App extends React.Component {
   render() {
     return (
       <div className="App">
+        <div className="courseDiv">
+          <img src={Logo} alt="CF Logo"></img>
 
-      <div className="courseDiv">
-      <img src={Logo}></img>
-      
-      {this.state.courses.map((course, index) => {
-          return (
-            <div key={index} className="courses">
-              <button onClick={() => this.handleClick(course)}>
-                {course.title}
-              </button>
-            </div>
-          );
-        })}
-
-      </div>
-      
-        
+          {this.state.courses.map((course, index) => {
+            return (
+              <div key={index} className="courses">
+                <button onClick={() => this.handleClick(course)}>
+                  {course.title}
+                </button>
+              </div>
+            );
+          })}
+        </div>
 
         {this.state.showData ? (
-          <div>
+          <div className="course-data">
             <CourseDetail
               courseData={this.state.courseData}
               continentCode={this.state.continentCode}
             />
-            <button className="closeButton"onClick={() => this.collapseInfo()}>Close Details</button>
+            <button className="closeButton" onClick={() => this.collapseInfo()}>
+              Close Details
+            </button>
           </div>
         ) : (
           <div className="click-text">Click a course for more info</div>
