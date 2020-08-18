@@ -1,5 +1,7 @@
 import React from "react";
 import CourseDetail from "./components/CourseDetail";
+import "./App.css";
+import Logo from "./img/1587802554_indigo_inverted.png"
 
 class App extends React.Component {
   state = {
@@ -73,10 +75,18 @@ class App extends React.Component {
     this.fetchCourseData(course);
   }
 
+  collapseInfo() {
+    this.setState({ showData: false });
+  }
+
   render() {
     return (
       <div className="App">
-        {this.state.courses.map((course, index) => {
+
+      <div className="courseDiv">
+      <img src={Logo}></img>
+      
+      {this.state.courses.map((course, index) => {
           return (
             <div key={index} className="courses">
               <button onClick={() => this.handleClick(course)}>
@@ -86,15 +96,20 @@ class App extends React.Component {
           );
         })}
 
+      </div>
+      
+        
+
         {this.state.showData ? (
-          <div className="course-data">
+          <div>
             <CourseDetail
               courseData={this.state.courseData}
               continentCode={this.state.continentCode}
             />
+            <button className="closeButton"onClick={() => this.collapseInfo()}>Close Details</button>
           </div>
         ) : (
-          "Click on a course!"
+          <div className="click-text">Click a course for more info</div>
         )}
       </div>
     );
