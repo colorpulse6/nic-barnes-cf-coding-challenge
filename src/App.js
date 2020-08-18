@@ -7,7 +7,7 @@ class App extends React.Component {
     courseData: {},
     showData: false,
     userIp: "",
-    continentCode: ""
+    continentCode: "",
   };
 
   componentDidMount() {
@@ -32,13 +32,13 @@ class App extends React.Component {
     )
       .then((res) => res.json())
       .then((courseData) => {
-        courseData.title = course.title
+        courseData.title = course.title;
         return courseData;
       })
       .then(
         (courseData) => {
           this.setState({
-            showData: true, 
+            showData: true,
             courseData: courseData,
           });
           console.log(courseData);
@@ -49,25 +49,28 @@ class App extends React.Component {
 
   fetchLocation() {
     fetch(`https://geolocation-db.com/json/`)
-    .then((res)=> res.json())
-    .then((res)=>{
-      this.setState({ userIp: res.IPv4 });
-      fetch(
-        `http://api.ipstack.com/${this.state.userIp}?access_key=${process.env.REACT_APP_GEO_API_KEY}`
-      )
-      .then((res)=> res.json())
-      .then((location)=> {
-        this.setState({ continentCode: location.continent_code }, () => console.log(this.state.continentCode))
-      }, (error)=> console.log(error))
-    })
-
+      .then((res) => res.json())
+      .then((res) => {
+        this.setState({ userIp: res.IPv4 });
+        fetch(
+          `http://api.ipstack.com/${this.state.userIp}?access_key=${process.env.REACT_APP_GEO_API_KEY}`
+        )
+          .then((res) => res.json())
+          .then(
+            (location) => {
+              this.setState({ continentCode: location.continent_code }, () =>
+                console.log(this.state.continentCode)
+              );
+            },
+            (error) => console.log(error)
+          );
+      });
   }
 
   handleClick(course) {
     // this.setState({ showData: true });
-    
+
     this.fetchCourseData(course);
-    
   }
 
   render() {
@@ -75,7 +78,7 @@ class App extends React.Component {
       <div className="App">
         {this.state.courses.map((course, index) => {
           return (
-            <div key={index} className='courses'>
+            <div key={index} className="courses">
               <button onClick={() => this.handleClick(course)}>
                 {course.title}
               </button>
@@ -84,14 +87,12 @@ class App extends React.Component {
         })}
 
         {this.state.showData ? (
-          <div className='course-data'>
-            <CourseDetail 
+          <div className="course-data">
+            <CourseDetail
               courseData={this.state.courseData}
               continentCode={this.state.continentCode}
-            />          
-
+            />
           </div>
-          
         ) : (
           "Click on a course!"
         )}
